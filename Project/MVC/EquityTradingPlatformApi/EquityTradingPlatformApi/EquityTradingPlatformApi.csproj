@@ -249,6 +249,8 @@
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Block.cs" />
     <Compile Include="Models\CurrentPosition.cs" />
+    <Compile Include="Models\CustomBlockCreation.cs" />
+    <Compile Include="Models\CustomBlockModel.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\ProjectContext.cs" />

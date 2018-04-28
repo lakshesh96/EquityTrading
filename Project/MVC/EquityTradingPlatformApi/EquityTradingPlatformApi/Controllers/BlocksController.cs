@@ -15,11 +15,12 @@ namespace EquityTradingPlatformApi.Controllers
     public class BlocksController : ApiController
     {
         private ProjectContext db = new ProjectContext();
-
+        private CustomBlockCreation CustomBlocks = new CustomBlockCreation();
         // GET: api/Blocks
-        public IQueryable<Block> GetBlocks()
+        public IHttpActionResult GetBlocks()
         {
-            return db.Blocks; ;
+
+            return Ok(CustomBlocks.CreateList( db.Blocks.ToList())); 
         }
 
         // GET 
@@ -50,14 +51,14 @@ namespace EquityTradingPlatformApi.Controllers
                              &
                              m.UserId == userId
                              select n;
-                return Ok(blocks.ToList());
+                return Ok(CustomBlocks.CreateList( blocks.ToList()));
             }
             //var userblocks = from n in db.
             var userblocks = from n in db.Blocks
                              join m in db.Orders on n.Id equals m.BlockId
                              where n.BlockStatus.ToString() == blockStatus & m.UserId == userId
                              select n;
-            return Ok(userblocks.ToList());
+            return Ok(CustomBlocks.CreateList(userblocks.ToList()));
         }
 
 
