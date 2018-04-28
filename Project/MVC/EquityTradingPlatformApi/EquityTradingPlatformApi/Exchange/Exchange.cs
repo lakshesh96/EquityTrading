@@ -50,7 +50,7 @@ namespace EquityTradingPlatformApi.Exchange
                     }
                     if(this.side==Side.Sell)
                     {
-                        ExecuteForSellFull();
+                        ExecuteForSell();
                     }
                     if (FullExecutionFlag)
                         this.block.BlockStatus = BlockStatus.Executed;
@@ -60,14 +60,15 @@ namespace EquityTradingPlatformApi.Exchange
                 }
                 else
                 {
-                this.block.BlockStatus = BlockStatus.Partial;
+                    this.block.BlockStatus = BlockStatus.Partial;
                     if (this.VolumeAvailable < this.totalQuantity && this.side==Side.Buy)
                     {//if volume available for stock is less than volume asked only for buy side
                         this.FillQuantity = this.VolumeAvailable;
                     }
-                this.VolumeExecuted = this.FillQuantity;
+                //this.VolumeExecuted = this.FillQuantity;
                     foreach (var item in this.orders)
                     {
+                        
                         if (FillQuantity < item.Quantity && FillQuantity != 0)
                         {//if cannot fill fully
                             if (item.OrderType == OrderType.Market || CheckStopValid(item) || CheckLimitValid(item) || CheckStopLimitValid(item))
@@ -80,7 +81,9 @@ namespace EquityTradingPlatformApi.Exchange
                         {//if can fill fully
                             if (item.OrderType == OrderType.Market || CheckStopLimitValid(item) || CheckStopValid(item) || CheckLimitValid(item))
                             {
+                                this.FillQuantity -= item.Quantity;
                                 AddOrderFull(item);
+                                
                             }
                         }
                         else if (FillQuantity == 0)
@@ -88,7 +91,8 @@ namespace EquityTradingPlatformApi.Exchange
                             break;
                         }
                     }
-                    
+                    if(this.side==Side.Sell)
+                        ExecuteForSell();
                     db.SaveChanges();
                 }
                 ChangeMarketPrice();//fluctuate market price
@@ -158,7 +162,7 @@ namespace EquityTradingPlatformApi.Exchange
         public void AddOrderFull(Order item)
         {
             item.BlockId = null;
-            this.VolumeExecuted = item.Quantity;
+            this.VolumeExecuted += item.Quantity;
             item.OrderStatus = OrderStatus.Executed;
             if (this.side == Side.Buy)
                 ExecuteForBuyFull(item);
@@ -176,7 +180,7 @@ namespace EquityTradingPlatformApi.Exchange
             db.CurrentPositions.Add(currentPositionobject);
             this.VolumeAvailable -= item.Quantity;
         }
-        public void ExecuteForSellFull()
+        public void ExecuteForSell()
         {
             List<CurrentPosition> currentPositions = (from n in db.CurrentPositions
                                                        join m in db.Orders on
@@ -215,26 +219,25 @@ namespace EquityTradingPlatformApi.Exchange
         {
             item.OrderStatus = OrderStatus.Partial;
             this.block.BlockStatus = BlockStatus.Partial;
+            this.VolumeExecuted += this.FillQuantity;
+            if (this.side == Side.Buy)
+                ExecuteForBuyPartial(item);
+            else
+                this.VolumeAvailable += this.FillQuantity;
+            this.FillQuantity = 0;
+        }
+        public void ExecuteForBuyPartial(Order item)
+        {
             CurrentPosition currentPositionobject = new CurrentPosition();
             currentPositionobject.Date = System.DateTime.Now;
             currentPositionobject.PriceExecuted = this.stock.CurrentPrice;
             currentPositionobject.OrderId = item.Id;
             currentPositionobject.VolumeExecuted = this.FillQuantity;
             item.Quantity -= this.FillQuantity;
-            if (this.side == Side.Buy)
-            {
-                this.VolumeAvailable -= this.FillQuantity;
-            }
-            else if(this.side==Side.Sell)
-            {
-                this.VolumeAvailable += this.FillQuantity;
-            }
+            this.VolumeAvailable -= this.FillQuantity;
             db.CurrentPositions.Add(currentPositionobject);
-            this.FillQuantity = 0;
-            this.totalQuantity = 0;
-
         }
-        public Boolean CheckSellValid()
+    public Boolean CheckSellValid()
         {
             if (this.side == Side.Buy)
                 return true;
