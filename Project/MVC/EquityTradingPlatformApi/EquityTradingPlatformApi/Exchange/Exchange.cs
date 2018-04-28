@@ -17,6 +17,7 @@ namespace EquityTradingPlatformApi.Exchange
         int FillQuantity = 0;
         int VolumeAvailable = 0;
         int VolumeExecuted = 0;
+
         public Exchange(int id)                         //constructer to accept 
         {
             this.db = new ProjectContext();
@@ -29,24 +30,34 @@ namespace EquityTradingPlatformApi.Exchange
         {
                 Random random = new Random();
                 GetTotal();                     //Get total quantity for all orders in block 
+                
                 if (this.totalQuantity == 0)    //check for no orders
+                    return false;
+
+                if (!CheckSellValid())          //Check for Sell Quantity Validity AVailable in Holding
                     return false;
 
                 this.FillQuantity = random.Next(2 * this.totalQuantity);      //Random filling within 2*totalquantity
                 if ((this.FillQuantity >= this.totalQuantity&&this.VolumeAvailable >=this.totalQuantity&&this.side==Side.Buy)||(this.side==Side.Sell&&this.FillQuantity>=this.totalQuantity) ) 
-                {//if Fully Filled (for both buy and sell)
-                this.VolumeExecuted=this.totalQuantity; 
-                   this.block.BlockStatus = BlockStatus.Executed;
+                {                                                           //if Fully Filled (for both buy and sell)
+                    bool FullExecutionFlag = true;
                     foreach (var item in this.orders)
                     {
                         if (item.OrderType == OrderType.Market || CheckStopLimitValid(item) || CheckStopValid(item) || CheckLimitValid(item))
-                        {
-                           
                             AddOrderFull(item);
-                        }
+                        else
+                            FullExecutionFlag = false;
                     }
+                    if(this.side==Side.Sell)
+                    {
+                        ExecuteForSellFull();
+                    }
+                    if (FullExecutionFlag)
+                        this.block.BlockStatus = BlockStatus.Executed;
+                    else
+                        this.block.BlockStatus = BlockStatus.Partial;
                     db.SaveChanges();
-            }
+                }
                 else
                 {
                 this.block.BlockStatus = BlockStatus.Partial;
@@ -132,7 +143,7 @@ namespace EquityTradingPlatformApi.Exchange
             return false;
         }
         public void GetTotal()
-        {//return total quantity for stock
+        {//return total quantity for orders
             if (this.block == null)
                 this.totalQuantity = 0;
             else
@@ -147,26 +158,58 @@ namespace EquityTradingPlatformApi.Exchange
         public void AddOrderFull(Order item)
         {
             item.BlockId = null;
+            this.VolumeExecuted = item.Quantity;
             item.OrderStatus = OrderStatus.Executed;
+            if (this.side == Side.Buy)
+                ExecuteForBuyFull(item);
+            else
+                this.VolumeAvailable += item.Quantity;                
+            item.Quantity = 0;
+        }
+        public void ExecuteForBuyFull(Order item)
+        {
             CurrentPosition currentPositionobject = new CurrentPosition();
             currentPositionobject.Date = System.DateTime.Now;
             currentPositionobject.PriceExecuted = this.stock.CurrentPrice;
             currentPositionobject.OrderId = item.Id;
             currentPositionobject.VolumeExecuted = item.Quantity;
             db.CurrentPositions.Add(currentPositionobject);
-            this.FillQuantity -= item.Quantity;
-            this.totalQuantity -= item.Quantity;
-            
-            if (this.side == Side.Buy)
+            this.VolumeAvailable -= item.Quantity;
+        }
+        public void ExecuteForSellFull()
+        {
+            List<CurrentPosition> currentPositions = (from n in db.CurrentPositions
+                                                       join m in db.Orders on
+                                                       n.OrderId equals m.Id
+                                                       where (m.StocksId == this.stock.Id
+                                                       & m.UserId == this.block.UserId)
+                                                       orderby n.Date ascending
+                                                       select n).ToList();
+
+            int ExecutedItemQuantity = this.VolumeExecuted;
+            double TotalBuyPrice = 0;
+            foreach (var currentHolding in currentPositions)
             {
-                this.VolumeAvailable -= item.Quantity;
+                if (currentHolding.VolumeExecuted <= ExecutedItemQuantity)
+                {
+                    TotalBuyPrice += (currentHolding.PriceExecuted * currentHolding.VolumeExecuted);
+                    ExecutedItemQuantity -= currentHolding.VolumeExecuted;
+                    db.CurrentPositions.Remove(currentHolding);
+                }
+                else
+                {
+                    TotalBuyPrice += (currentHolding.PriceExecuted * ExecutedItemQuantity);
+                    currentHolding.VolumeExecuted -= ExecutedItemQuantity;
+                    ExecutedItemQuantity = 0;
+                }
             }
-            else if(this.side==Side.Sell)
-            {
-                this.VolumeAvailable += item.Quantity;                
-            }
-            item.Quantity = 0;
-            
+            TransactionHistory history = new TransactionHistory();
+            history.BuyPrice = TotalBuyPrice / VolumeExecuted;
+            history.Quantity = VolumeExecuted;
+            history.SellPrice = this.stock.CurrentPrice;
+            history.StockId = this.stock.Id;
+            history.UserId = this.block.UserId;
+            db.TransactionHistory.Add(history);
         }
         public void AddOrderPartial(Order item)
         {
@@ -190,6 +233,26 @@ namespace EquityTradingPlatformApi.Exchange
             this.FillQuantity = 0;
             this.totalQuantity = 0;
 
+        }
+        public Boolean CheckSellValid()
+        {
+            if (this.side == Side.Buy)
+                return true;
+            var stockQuantity = from n in db.CurrentPositions
+                                join m in db.Orders
+                                on n.OrderId equals m.Id
+                                where (m.StocksId == this.stock.Id
+                                & m.UserId == this.block.UserId)
+                                select (n.VolumeExecuted);
+            int TotalQuantityInHolding = 0;
+            foreach(var item in stockQuantity)
+            {
+                TotalQuantityInHolding += item;
+            }
+            if (TotalQuantityInHolding < this.totalQuantity)
+                return false;
+            else
+                return true;
         }
     }
 }
