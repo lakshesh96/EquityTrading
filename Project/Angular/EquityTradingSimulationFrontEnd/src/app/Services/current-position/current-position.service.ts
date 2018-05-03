@@ -41,6 +41,7 @@ export class CurrentPositionModelView {
 	StockName: string;
 	StockSymbol: string;
 	AvgQuantity: number;
+	ShowDetails: boolean = false;
 	AvgBuyingPrice: number;
 	CurrentPrice: number;
 	TotalValue: number;
