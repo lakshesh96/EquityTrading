@@ -22,8 +22,16 @@ export class BuySellService {
     this.buyorder = o;
   }
 
-  GetSellOrder(o:CurrentPosition){
-    this.sellorder = o;
+  GetSellOrder(order:CurrentPosition){
+    console.log("At sell service:");
+    this.sellorder = order;
+    if(sessionStorage.getItem("Type") == "Trader"){
+      //BHAI MODEL HUGGA HUA HAI POORA
+      //JAHA TAK MUJHE DIKH RAHA SAB NAYA ANY TYPE KA MODEL BANA KE SEND KARDE
+    }
+    else{
+
+    }
   }
 
   AddBuyOrder(r:any)

@@ -11,38 +11,15 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using EquityTradingPlatformApi.Models;
 using Newtonsoft.Json.Linq;
+using EquityTradingPlatformApi.Layers;
+using EquityTradingPlatformApi.Custom_Classes;
 
 namespace EquityTradingPlatformApi.Controllers
 {
     public class UsersController : ApiController
     {
         private ProjectContext db = new ProjectContext();
-
-
-        // GET ALL USERS
-        // GET: api/Users
-        public IQueryable<User> GetUsers()
-        {
-            return db.Users;
-        }
-
-
-        /* GET SPECIFIC USER BY ID
-        // GET: api/Users/5
-        [ResponseType(typeof(User))]
-        public IHttpActionResult GetUser(int id)
-        {
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(user);
-        }
-        */
-
-
+        private UserLayer userLayer = new UserLayer();
         // GET APPROVED TRADERS
         // GET: api/Trader/Approved
         [HttpGet]
@@ -50,10 +27,7 @@ namespace EquityTradingPlatformApi.Controllers
         [ResponseType(typeof(User))]
         public IHttpActionResult GetApprovedTraders()
         {
-            var approvedTraders = from user in db.Users
-                                  where user.Approved == true && (user.Type == UserType.Trader || user.Type == UserType.Both)
-                                  select user;
-            return Ok(approvedTraders);
+            return Ok(userLayer.GetApprovedUsers(UserType.Trader));
         }
 
 
@@ -64,10 +38,7 @@ namespace EquityTradingPlatformApi.Controllers
         [ResponseType(typeof(User))]
         public IHttpActionResult GetUnapprovedTraders()
         {
-            var approvedTraders = from user in db.Users
-                                  where user.Approved == false && (user.Type == UserType.Trader || user.Type == UserType.Both)
-                                  select user;
-            return Ok(approvedTraders);
+            return Ok(userLayer.GetUnapprovedUsers(UserType.Trader));
         }
 
 
@@ -78,10 +49,7 @@ namespace EquityTradingPlatformApi.Controllers
         [ResponseType(typeof(User))]
         public IHttpActionResult GetApprovedPM()
         {
-            var approvedTraders = from user in db.Users
-                                  where user.Approved == true && (user.Type == UserType.PortfolioManager || user.Type == UserType.Both)
-                                  select user;
-            return Ok(approvedTraders);
+            return Ok(userLayer.GetApprovedUsers(UserType.PortfolioManager));
         }
 
 
@@ -92,49 +60,8 @@ namespace EquityTradingPlatformApi.Controllers
         [ResponseType(typeof(User))]
         public IHttpActionResult GetUnapprovedPM()
         {
-            var approvedTraders = from user in db.Users
-                                  where user.Approved == false && (user.Type == UserType.PortfolioManager || user.Type == UserType.Both)
-                                  select user;
-            return Ok(approvedTraders);
+            return Ok(userLayer.GetUnapprovedUsers(UserType.PortfolioManager));
         }
-
-
-        /* EDIT USER FUNCTIONALITY
-        // PUT: api/Users/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutUser(int id, User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-        */
 
 
         // LOGIN FOR TRADERS AND PM
@@ -144,31 +71,7 @@ namespace EquityTradingPlatformApi.Controllers
         [HttpPost]
         public IHttpActionResult PostLogin(LoginUser user)
         {
-            var result = JObject.Parse(@"{}");
-            result["response"] = false;
-
-            foreach (User u in db.Users)
-            {
-                if (u.UserName == user.UserName && u.Password == user.Password)
-                {
-                    if (u.Type == user.Type)
-                    {
-                        result["response"] = true;
-                        result["id"] = u.Id;
-                        result["type"] = u.Type.ToString();
-                        result["error"] = "";
-                    } 
-                    else
-                    {
-                        result["response"] = false;
-                        result["type"] = "";
-                        result["error"] = "Incorrect UserType";
-                    }
-                    return Ok(result);
-                }                    
-            }
-            result["error"] = "Incorrect UserName or Password";
-            return Ok(result);
+            return Ok(userLayer.Login(user));
         }
 
 
@@ -189,7 +92,7 @@ namespace EquityTradingPlatformApi.Controllers
                 db.SaveChanges();
                 return StatusCode(HttpStatusCode.NoContent);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -234,25 +137,6 @@ namespace EquityTradingPlatformApi.Controllers
             return Ok(user.Id);
         }
 
-
-
-        /* DELETE USER FUNCTIONALITY
-        // DELETE: api/Users/5
-        [ResponseType(typeof(User))]
-        public IHttpActionResult DeleteUser(int id)
-        {
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            db.Users.Remove(user);
-            db.SaveChanges();
-
-            return Ok(user);
-        }
-        */
 
 
 
@@ -307,12 +191,5 @@ namespace EquityTradingPlatformApi.Controllers
         {
             return db.Users.Count(e => e.Id == id) > 0;
         }
-    }
-
-    public class LoginUser
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public UserType Type { get; set; }
     }
 }
