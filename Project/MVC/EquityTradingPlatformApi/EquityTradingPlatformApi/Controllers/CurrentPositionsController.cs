@@ -9,20 +9,11 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using EquityTradingPlatformApi.Models;
+using EquityTradingPlatformApi.Custom_Classes;
 
 namespace EquityTradingPlatformApi.Controllers
 {
-    class CustomCurrentPos
-    {
-        public int StockId { get; set; }
-        public string Trader_Name { get; set; }
-        public string Stock_Name { get; set; }
-        public string Symbol { get; set; }
-        public double Quantity { get; set; }
-        public double Buying_Price { get; set; }
-        public double Current_Price { get; set; }
-        public double Total_Value { get; set; }
-    }
+   
 
 
     public class CurrentPositionsController : ApiController
@@ -66,7 +57,7 @@ namespace EquityTradingPlatformApi.Controllers
             { 
                 List<Order> currentUserOrderIds = getUserOrders.ToList();
 
-                List<CustomCurrentPos> returnPositions = new List<CustomCurrentPos>();
+                List<CustomCurrentPosition> returnPositions = new List<CustomCurrentPosition>();
 
                 //foreach (CurrentPosition currentPos in db.CurrentPositions)
                 List<Stocks> stockList = (from n in db.Stocks select n).ToList();
@@ -80,7 +71,7 @@ namespace EquityTradingPlatformApi.Controllers
                                             {
                         if (o.Id == cp.OrderId)
                         {
-                            CustomCurrentPos currentPos = new CustomCurrentPos();
+                            CustomCurrentPosition currentPos = new CustomCurrentPosition();
 
                             Stocks s = FetchStockObj(o.StocksId, stockList);
                             User u = FetchUserObj(o.UserId, userList);

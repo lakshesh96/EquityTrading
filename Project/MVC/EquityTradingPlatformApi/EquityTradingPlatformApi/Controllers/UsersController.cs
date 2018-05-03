@@ -99,44 +99,6 @@ namespace EquityTradingPlatformApi.Controllers
         }
 
 
-        /* EDIT USER FUNCTIONALITY
-        // PUT: api/Users/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutUser(int id, User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-        */
-
-
         // LOGIN FOR TRADERS AND PM
         // Post: api/Users/Login
         [Route("api/Users/Login")]
@@ -234,25 +196,6 @@ namespace EquityTradingPlatformApi.Controllers
             return Ok(user.Id);
         }
 
-
-
-        /* DELETE USER FUNCTIONALITY
-        // DELETE: api/Users/5
-        [ResponseType(typeof(User))]
-        public IHttpActionResult DeleteUser(int id)
-        {
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            db.Users.Remove(user);
-            db.SaveChanges();
-
-            return Ok(user);
-        }
-        */
 
 
 
