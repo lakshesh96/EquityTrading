@@ -32,6 +32,7 @@ export class AdminloginComponent implements OnInit {
           sessionStorage.setItem("AdminLogin",response.response);
 
           if(response.response == true){
+            sessionStorage.setItem('AdminId',value.Username);
             this.router.navigateByUrl('Admin/Stocks');
           }
           else{
