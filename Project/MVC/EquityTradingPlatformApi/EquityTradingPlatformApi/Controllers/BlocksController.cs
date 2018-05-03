@@ -18,7 +18,7 @@ namespace EquityTradingPlatformApi.Controllers
     {
         private ProjectContext db = new ProjectContext();
         private CustomBlockCreation CustomBlocks = new CustomBlockCreation();
-        private BusinessLayer businessLayer = new BusinessLayer();
+        private BlockLayer blockLayer = new BlockLayer();
         // GET: api/Blocks
         public IHttpActionResult GetBlocks()
         {
@@ -45,7 +45,7 @@ namespace EquityTradingPlatformApi.Controllers
         public IHttpActionResult GetTraderPendingBlocks(int userId, string blockStatus)
         {
             
-            List<CustomBlockModel> blockList = businessLayer.GetBlocksWithStatus(userId, blockStatus);
+            List<CustomBlockModel> blockList = blockLayer.GetBlocksWithStatus(userId, blockStatus);
             return Ok(blockList);
         }
 
@@ -53,7 +53,7 @@ namespace EquityTradingPlatformApi.Controllers
         [Route("api/Trader/AddToBlock")]
         public IHttpActionResult AddtoBlocks(int orderId, int blockId)
         {
-            if (businessLayer.AddNewOrderToBlock(orderId, blockId))
+            if (blockLayer.AddNewOrderToBlock(orderId, blockId))
                 return Ok(true);
             else
                 return BadRequest();
@@ -66,7 +66,7 @@ namespace EquityTradingPlatformApi.Controllers
         [Route("api/Trader/NewBlock")]
         public IHttpActionResult PostNewBlock(int orderId)
         {
-            if (businessLayer.AddNewBlock(orderId))
+            if (blockLayer.AddNewBlock(orderId))
                 return Ok(true);
             else
                 return Ok(false);

@@ -198,11 +198,13 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Custom_Classes\CustomCurrentPosition.cs" />
+    <Compile Include="Custom_Classes\LoginUser.cs" />
     <Compile Include="Exchange\Exchange.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Layers\BusinessLayer.cs" />
+    <Compile Include="Layers\BlockLayer.cs" />
+    <Compile Include="Layers\UserLayer.cs" />
     <Compile Include="Migrations\201804110617186_Initial.cs" />
     <Compile Include="Migrations\201804110617186_Initial.Designer.cs">
       <DependentUpon>201804110617186_Initial.cs</DependentUpon>

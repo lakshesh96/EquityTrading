@@ -68,15 +68,6 @@ namespace EquityTradingPlatformApi.Controllers
             
             try
             {
-                //foreach (Stocks s in db.Stocks)
-                //{
-                //    if (s.Id == id)
-                //    {
-                //        s.CurrentPrice = stocks.CurrentPrice;
-                //        result["success"] = true;
-                //        result["error"] = "0";
-                //    }
-                //}
                 db.SaveChanges();
                 result["success"] = true;
                 result["error"] = "0";
@@ -127,8 +118,6 @@ namespace EquityTradingPlatformApi.Controllers
             db.SaveChanges();
 
             return Ok(new {response = "true"});
-            //return CreatedAtRoute("DefaultApi", new { id = stocks.Id }, stocks);
-            //return Ok(true);
         }
 
         //Batch Add of Stocks
@@ -141,7 +130,6 @@ namespace EquityTradingPlatformApi.Controllers
             {
                 foreach (var item in mydata)
                 {
-                    //Stocks stock = (Stocks)Newtonsoft.Json.JsonConvert.DeserializeObject(item.ToString());
                     db.Stocks.Add(item);
                 }
                 db.SaveChanges();

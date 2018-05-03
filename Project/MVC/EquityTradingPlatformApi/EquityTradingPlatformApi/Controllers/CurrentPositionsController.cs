@@ -13,34 +13,9 @@ using EquityTradingPlatformApi.Custom_Classes;
 
 namespace EquityTradingPlatformApi.Controllers
 {
-   
-
-
     public class CurrentPositionsController : ApiController
     {
         private ProjectContext db = new ProjectContext();
-
-
-        private Stocks FetchStockObj(int id, List<Stocks> stocks)
-        {
-            foreach(Stocks s in stocks)
-            {
-                if (s.Id == id)
-                    return s;
-            }
-            return null;
-        }
-
-        private User FetchUserObj(int id, List<User> users)
-        {
-            foreach (User s in users)
-            {
-                if (s.Id == id)
-                    return s;
-            }
-            return null;
-        }
-
 
         // GET CURRENT POSITION FOR USER ?userId
         [Route("api/Position/Approved")]
@@ -59,7 +34,6 @@ namespace EquityTradingPlatformApi.Controllers
 
                 List<CustomCurrentPosition> returnPositions = new List<CustomCurrentPosition>();
 
-                //foreach (CurrentPosition currentPos in db.CurrentPositions)
                 List<Stocks> stockList = (from n in db.Stocks select n).ToList();
                 List<User> userList = (from n in db.Users select n).ToList();
 
@@ -73,134 +47,23 @@ namespace EquityTradingPlatformApi.Controllers
                         {
                             CustomCurrentPosition currentPos = new CustomCurrentPosition();
 
-                            Stocks s = FetchStockObj(o.StocksId, stockList);
-                            User u = FetchUserObj(o.UserId, userList);
+                            Stocks s = db.Stocks.Find(o.StocksId);
+                            User u = db.Users.Find(o.UserId);
 
                             currentPos.Trader_Name = u.Name;
                             currentPos.Stock_Name = s.Name;
                             currentPos.Symbol = s.Symbol;
                             currentPos.Buying_Price = cp.PriceExecuted;
-
-                            // if (o.OrderStatus == OrderStatus.Executed)
-                            // {
-                            //     currentPos.Quantity = o.Quantity;
-                            // }
-                            // else if (o.OrderStatus == OrderStatus.Partial)
-                            // {
-                            //     currentPos.Quantity = cp.VolumeExecuted;
-                            // }
-							currentPos.Quantity = cp.VolumeExecuted;
-
+                            currentPos.Quantity = cp.VolumeExecuted;
                             currentPos.StockId = s.Id;
                             currentPos.Current_Price = s.CurrentPrice;
-                            
                             currentPos.Total_Value = currentPos.Quantity * currentPos.Current_Price;
                             returnPositions.Add(currentPos);
                         }
                     }
                 }
-                        
-
                 return Ok(returnPositions);
             }
-
-
-            //CurrentPosition currentPosition = db.CurrentPositions.Find(id);
-            //if (currentPosition == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //return Ok(currentPosition);
-            //return Ok(true);
-        }
-
-
-
-
-
-        // GET: api/CurrentPositions
-        public IQueryable<CurrentPosition> GetCurrentPositions()
-        {
-            return db.CurrentPositions;
-        }
-
-        // GET: api/CurrentPositions/5
-        [ResponseType(typeof(CurrentPosition))]
-        public IHttpActionResult GetCurrentPosition(int id)
-        {
-            CurrentPosition currentPosition = db.CurrentPositions.Find(id);
-            if (currentPosition == null)
-            {
-                return NotFound();
-            }
-            return Ok(currentPosition);
-        }
-
-        // PUT: api/CurrentPositions/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutCurrentPosition(int id, CurrentPosition currentPosition)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != currentPosition.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(currentPosition).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CurrentPositionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/CurrentPositions
-        [ResponseType(typeof(CurrentPosition))]
-        public IHttpActionResult PostCurrentPosition(CurrentPosition currentPosition)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.CurrentPositions.Add(currentPosition);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = currentPosition.Id }, currentPosition);
-        }
-
-        // DELETE: api/CurrentPositions/5
-        [ResponseType(typeof(CurrentPosition))]
-        public IHttpActionResult DeleteCurrentPosition(int id)
-        {
-            CurrentPosition currentPosition = db.CurrentPositions.Find(id);
-            if (currentPosition == null)
-            {
-                return NotFound();
-            }
-
-            db.CurrentPositions.Remove(currentPosition);
-            db.SaveChanges();
-
-            return Ok(currentPosition);
         }
 
         protected override void Dispose(bool disposing)

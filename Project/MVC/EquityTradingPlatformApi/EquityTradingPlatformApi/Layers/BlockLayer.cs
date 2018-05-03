@@ -8,10 +8,10 @@ using System.Web;
 
 namespace EquityTradingPlatformApi.Layers
 {
-    public class BusinessLayer
+    public class BlockLayer
     {
         ProjectContext db;
-        public BusinessLayer()
+        public BlockLayer()
         {
             db = new ProjectContext();
         }
