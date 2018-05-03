@@ -1,9 +1,10 @@
-﻿using System;
+﻿using EquityTradingPlatformApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace EquityTradingPlatformApi.Models
+namespace EquityTradingPlatformApi.Custom_Classes
 {
     public class CustomBlockCreation
     {
