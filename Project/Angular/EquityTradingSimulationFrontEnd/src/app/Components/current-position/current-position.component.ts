@@ -13,7 +13,6 @@ export class CurrentPositionComponent implements OnInit {
 
 	list: CurrentPosition[];
 	formattedCurrentPositionList: any[];
-	show: boolean = false;
 	
 	constructor(private currentPositionService: CurrentPositionService, private buysellservice: BuySellService) { }
 

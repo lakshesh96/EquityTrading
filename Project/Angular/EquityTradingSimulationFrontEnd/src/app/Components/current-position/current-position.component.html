@@ -29,11 +29,11 @@
 				<td>{{cp.TotalValue | currency:'INR':'symbol' }}</td>
 				<td>
 					<a routerLink="/Trader/Sell"><button type="button" class="btn btn-primary" (click)="Sell(s)">Sell</button></a>
-					<button class="btn btn-secondary" (click)="show = !show">Details</button>
+					<button class="btn btn-secondary" (click)="cp.ShowDetails = !cp.ShowDetails">Details</button>
 				</td>
 			</tr>
-			<ng-container *ngIf="show">
-			<tr *ngFor="let o of cp.CurrentPositionList">
+			<ng-container *ngIf="cp.ShowDetails">
+			<tr *ngFor="let o of cp.CurrentPositionList" style="color: darkgrey">
 				<td></td>
 				<td></td>
 				<td>{{o.Buying_Price | currency:'INR':'symbol' }}</td>

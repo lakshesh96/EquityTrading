@@ -1,5 +1,6 @@
 export class CurrentPosition {
     constructor(
+		public StockId: number,
          public Trader_Name :string,
          public Stock_Name:string,  
          public Symbol:string, 
