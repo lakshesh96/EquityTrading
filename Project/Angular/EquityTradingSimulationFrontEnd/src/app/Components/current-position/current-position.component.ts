@@ -30,7 +30,7 @@ export class CurrentPositionComponent implements OnInit {
 
 	ngOnInit() { }
 
-	Sell(e) {
-		this.buysellservice.GetSellOrder(e);
+	Sell(order) {
+		this.buysellservice.GetSellOrder(order);
 	}
 }
