@@ -3,6 +3,7 @@ import {Admin} from '../../Models/admin';
 import { FormControl, FormGroup, Validators} from '@angular/forms';
 import {GlobalService} from '../../Services/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import {Md5} from 'ts-md5/dist/md5';
 
 @Component({
   selector: 'app-adminlogin',
@@ -25,7 +26,7 @@ export class AdminloginComponent implements OnInit {
     });
   }
   onSubmit({ value, valid }: { value: Admin, valid: boolean }) {
-
+    value.Password = Md5.hashStr(value.Password).toString();
     this.globalService.PostMethod(value,this.url).subscribe(
       response => {
           this.id=response.id;
