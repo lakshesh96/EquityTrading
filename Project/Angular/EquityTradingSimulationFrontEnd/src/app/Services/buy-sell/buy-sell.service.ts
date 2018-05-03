@@ -9,8 +9,8 @@ export class BuySellService {
   /*private _baseUrl: string = "http://localhost:52705/api/Trader/Orders";
   private _baseUrl1: string = "http://localhost:52705/api/PM/Orders";*/
 
-  private Url: string = "api/Trader/Orders";
-  private Url1: string = "api/PM/Orders";
+  private urlTrader: string = "api/Trader/Orders";
+  private urlPM: string = "api/PM/Orders";
 
   constructor(private globalService:GlobalService) { }
 
@@ -24,13 +24,31 @@ export class BuySellService {
 
   GetSellOrder(order:CurrentPosition){
     console.log("At sell service:");
-    this.sellorder = order;
+		order.OrderType = "Market";
+    order.OrderSide = "Sell";
+    order.OrderStatus = "";
+    order.LimitPrice = null;
+    order.StopPrice = null;
     if(sessionStorage.getItem("Type") == "Trader"){
-      //BHAI MODEL HUGGA HUA HAI POORA
-      //JAHA TAK MUJHE DIKH RAHA SAB NAYA ANY TYPE KA MODEL BANA KE SEND KARDE
+      order.PMId = null;
+      order.UserId = parseInt( sessionStorage.getItem("UserId") );
+      console.log(order);
+
+      this.globalService.PostMethod(order,this.urlTrader).subscribe(
+        response => console.log(response),
+        error => console.error(error),
+      () => console.log("Success")
+      );
     }
     else{
+      //order.PMId = null;
+      console.log(order);
 
+      this.globalService.PostMethod(order,this.urlPM).subscribe(
+        response => console.log(response),
+        error => console.error(error),
+      () => console.log("Success")
+      );
     }
   }
 
@@ -45,11 +63,11 @@ export class BuySellService {
     );
     console.info(r); */
 
-    return this.globalService.PostMethod(r,this.Url);
+    return this.globalService.PostMethod(r,this.urlTrader);
   }
 
   AddBuyPMOrder(r:any){
-    return this.globalService.PostMethod(r,this.Url1);
+    return this.globalService.PostMethod(r,this.urlPM);
   }
 
 }
