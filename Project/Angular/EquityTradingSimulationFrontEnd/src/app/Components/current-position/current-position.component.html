@@ -20,20 +20,20 @@
 		</tr>
 	</thead>
 	<tbody>     
-		<ng-template ngFor let-ob [ngForOf]="otherList">
+		<ng-template ngFor let-cp [ngForOf]="formattedCurrentPositionList">
 			<tr class="">
-				<td>{{ob.StockName}} ({{ob.StockSymbol}})</td>
-				<td>{{ob.CurrentPrice | currency:'INR':'symbol' }}</td>
-				<td>{{ob.AvgBuyingPrice | currency:'INR':'symbol' }}</td>
-				<td>{{ob.AvgQuantity}}</td>
-				<td>{{ob.TotalValue | currency:'INR':'symbol' }}</td>
+				<td>{{cp.StockName}} ({{cp.StockSymbol}})</td>
+				<td>{{cp.CurrentPrice | currency:'INR':'symbol' }}</td>
+				<td>{{cp.AvgBuyingPrice | currency:'INR':'symbol' }}</td>
+				<td>{{cp.AvgQuantity}}</td>
+				<td>{{cp.TotalValue | currency:'INR':'symbol' }}</td>
 				<td>
 					<a routerLink="/Trader/Sell"><button type="button" class="btn btn-primary" (click)="Sell(s)">Sell</button></a>
 					<button class="btn btn-secondary" (click)="show = !show">Details</button>
 				</td>
 			</tr>
 			<ng-container *ngIf="show">
-			<tr *ngFor="let o of ob.CurrentPositionList">
+			<tr *ngFor="let o of cp.CurrentPositionList">
 				<td></td>
 				<td></td>
 				<td>{{o.Buying_Price | currency:'INR':'symbol' }}</td>
