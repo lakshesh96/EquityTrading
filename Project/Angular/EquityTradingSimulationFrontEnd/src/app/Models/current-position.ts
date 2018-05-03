@@ -15,7 +15,6 @@ export class CurrentPosition {
          public StopPrice: number,
          public UserId: number,
          public PMId: number,
-         public StockId: number
          ){
 }
 }
