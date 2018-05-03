@@ -15,5 +15,6 @@ namespace EquityTradingPlatformApi.Custom_Classes
         public double Buying_Price { get; set; }
         public double Current_Price { get; set; }
         public double Total_Value { get; set; }
+        public string Date { get; set; }
     }
 }

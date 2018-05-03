@@ -9,17 +9,19 @@
               <th>Block Side</th>
               <th>Stock Name</th>
               <th>Order Type</th>
+              <th>Quantity</th>
               <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let b of pendingBlocks;let i=index">
-            <td>{{b.Id}}</td>
+            <td>{{b.BlockId}}</td>
             <td >{{b.BlockStatus}}</td>
-            <td>{{b.Side}}</td>
-            <td>{{b.StocksId}}</td>
-            <td>{{b.Type}}</td>
-            <td><input type="button" value="Execute" class="btn btn-outline-primary" (click)="executepending(b.Id)" /></td>
+            <td>{{b.BlockSide}}</td>
+            <td>{{b.StocksName}}</td>
+            <td>{{b.OrderType}}</td>
+            <td>{{b.Quantity}}</td>
+            <td><input type="button" value="Execute" class="btn btn-outline-primary" (click)="executepending(b.BlockId)" /></td>
           </tr>
         </tbody>
       </table>

@@ -54,6 +54,7 @@ export class BlockserviceService {
  executeblock(exec_id)
  {
    console.log("executed");
+   console.log("Execution Id",exec_id);
   this.gs.GetMethod(this.ex_url+exec_id).subscribe(
     response => console.log(response),
     error => console.error(error),

@@ -33,15 +33,10 @@ namespace EquityTradingPlatformApi.Controllers
                 List<Order> currentUserOrderIds = getUserOrders.ToList();
 
                 List<CustomCurrentPosition> returnPositions = new List<CustomCurrentPosition>();
-
-                List<Stocks> stockList = (from n in db.Stocks select n).ToList();
-                List<User> userList = (from n in db.Users select n).ToList();
-
-                
-
+                List<CurrentPosition> currentPositions = db.CurrentPositions.ToList();
                 foreach (Order o in currentUserOrderIds)
                 {
-                    foreach(CurrentPosition cp in db.CurrentPositions)
+                    foreach(CurrentPosition cp in currentPositions)
                                             {
                         if (o.Id == cp.OrderId)
                         {
@@ -56,6 +51,7 @@ namespace EquityTradingPlatformApi.Controllers
                             currentPos.Buying_Price = cp.PriceExecuted;
                             currentPos.Quantity = cp.VolumeExecuted;
                             currentPos.StockId = s.Id;
+                            currentPos.Date = cp.Date.ToShortDateString();
                             currentPos.Current_Price = s.CurrentPrice;
                             currentPos.Total_Value = currentPos.Quantity * currentPos.Current_Price;
                             returnPositions.Add(currentPos);
