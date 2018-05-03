@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Regmodel } from '../../Models/regmodel';
 import { AbstractControl } from "@angular/forms/forms";
 import { ListService } from "../../Services/list-service/list.service";
+import {Md5} from 'ts-md5/dist/md5';
 
 
 @Component({

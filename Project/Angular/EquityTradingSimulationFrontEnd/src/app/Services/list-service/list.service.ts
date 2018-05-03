@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Regmodel } from "../../Models/regmodel";
 import {GlobalService} from '../../Services/global.service';
+import { Md5 } from 'ts-md5';
 
 @Injectable()
 export class ListService {
@@ -23,7 +24,7 @@ export class ListService {
 
   Add(r:Regmodel){
     console.log(r);
-    let b: any = [{Name: r.Name, Password: r.Userpass.Password, UserName: r.Username, EmployeeId: r.Empid, Approved:false, Type: r.Type}]
+    let b: any = [{Name: r.Name, Password: Md5.hashStr(r.Userpass.Password).toString(), UserName: r.Username, EmployeeId: r.Empid, Approved:false, Type: r.Type}]
     console.log("before service");
     console.log(b);
     this.globalService.PostMethod(b,this.url).subscribe(

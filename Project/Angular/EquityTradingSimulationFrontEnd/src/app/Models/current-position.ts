@@ -13,7 +13,8 @@ export class CurrentPosition {
          public LimitPrice: number,
          public StopPrice: number,
          public UserId: number,
-         public PMId: number
+         public PMId: number,
+         public StockId: number
          ){
 }
 }

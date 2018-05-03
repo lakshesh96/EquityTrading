@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators} from '@angular/forms';
 import {LoginService} from '../../Services/login/login.service';
 import {GlobalService} from '../../Services/global.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import {Md5} from 'ts-md5/dist/md5';
  
 
 @Component({
@@ -45,6 +46,9 @@ export class LoginComponent implements OnInit {
 
 	onSubmit({ value, valid }: { value: Login, valid: boolean }) {
 		this.loading = true;
+		value.Password = Md5.hashStr(value.Password).toString();
+		console.log("Hash Test:");
+		console.log(value);
 		this.globalService.PostMethod(value,this.url).subscribe(
 			response => {
 				this.id=response.id;
