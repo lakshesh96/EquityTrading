@@ -11,6 +11,8 @@ select * from Employees;
 insert into Employees (Name)
 values ('ishan'), ('aayush');
 
-select * from Orders
+select * from Orders;
 
-select * from CurrentPositions
+select * from CurrentPositions;
+
+select * from Blocks;
