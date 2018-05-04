@@ -13,3 +13,18 @@ export class Sellmodel {
         public PMId:number
         ){}
 }
+
+
+export class Sell {
+	public OrderType: number;
+	public OrderSide: number;
+	public StocksId: number;
+	public Quantity: number;
+	public UserId: number;
+	public PMId: number;
+	public OrderStatus: number;
+	public LimitPrice: number;
+	public StopPrice: number;
+	public BlockId: number;
+	public Positions
+}

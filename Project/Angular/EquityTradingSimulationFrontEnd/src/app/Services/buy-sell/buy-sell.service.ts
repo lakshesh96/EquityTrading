@@ -2,72 +2,39 @@ import { Injectable } from '@angular/core';
 import { Stocks } from "../../Models/stocks";
 import { CurrentPosition } from "../../Models/current-position";
 import { GlobalService } from "../../Services/global.service";
+import { CurrentPositionModelView } from '../../Models/current-position-model-view';
+import { Sell } from '../../Models/sell';
 
 @Injectable()
 export class BuySellService {
 
-  /*private _baseUrl: string = "http://localhost:52705/api/Trader/Orders";
-  private _baseUrl1: string = "http://localhost:52705/api/PM/Orders";*/
+	/*private _baseUrl: string = "http://localhost:52705/api/Trader/Orders";
+	private _baseUrl1: string = "http://localhost:52705/api/PM/Orders";*/
 
-  private urlTrader: string = "api/Trader/Orders";
-  private urlPM: string = "api/PM/Orders";
+	private urlTrader: string = "api/Trader/Orders";
+	private urlPM: string = "api/PM/Orders";
 
-  constructor(private globalService:GlobalService) { }
+	constructor(private globalService:GlobalService) { }
 
-  buyorder:Stocks;
-  sellorder:CurrentPosition;
+	buyorder: Stocks;
+	sellOrder;
 
-  GetBuyOrder(o:Stocks){
-	  console.log("Stock Info received for Buy order", o);
-    this.buyorder = o;
-  }
+	GetBuyOrder(o:Stocks){
+		console.log("Stock Info received for Buy order", o);
+		this.buyorder = o;
+	}
 
-  GetSellOrder(order:CurrentPosition){
-    console.log("At sell service:");
-		order.OrderType = "Market";
-    order.OrderSide = "Sell";
-    order.OrderStatus = "";
-    order.LimitPrice = null;
-    order.StopPrice = null;
-    if(sessionStorage.getItem("Type") == "Trader"){
-      order.PMId = null;
-      order.UserId = parseInt( sessionStorage.getItem("UserId") );
-      console.log(order);
+	GetSellOrder(order: CurrentPositionModelView){
+		this.sellOrder = order;
+		console.log("Stock Info received for Sell order", this.sellOrder);
+	}
 
-      this.globalService.PostMethod(order,this.urlTrader).subscribe(
-        response => console.log(response),
-        error => console.error(error),
-      () => console.log("Success")
-      );
-    }
-    else{
-      //order.PMId = null;
-      console.log(order);
+	AddBuyOrSellOrder(r:any) {
+		return this.globalService.PostMethod(r,this.urlTrader);
+	}
 
-      this.globalService.PostMethod(order,this.urlPM).subscribe(
-        response => console.log(response),
-        error => console.error(error),
-      () => console.log("Success")
-      );
-    }
-  }
-
-  AddBuyOrder(r:any)
-  {
-    /* alert("Traders received at my service");
-    console.log(r+"traders");
-    this.globalService.PostMethod(r,this._baseUrl).subscribe(
-        response => response,
-        error => console.error(error),
-        //() => this.getTraders()
-    );
-    console.info(r); */
-
-    return this.globalService.PostMethod(r,this.urlTrader);
-  }
-
-  AddBuyPMOrder(r:any){
-    return this.globalService.PostMethod(r,this.urlPM);
-  }
+	AddBuyPMOrder(r:any){
+	return this.globalService.PostMethod(r,this.urlPM);
+	}
 
 }
