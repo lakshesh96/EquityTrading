@@ -70,7 +70,7 @@ export class BuyrequestComponent implements OnInit {
 		}else{
 			value.UserId = +sessionStorage.getItem('UserId');
 			console.log(value, valid);
-		this.BSservice.AddBuyOrder(value).subscribe(
+			this.BSservice.AddBuyOrSellOrder(value).subscribe(
 			response => response,
 			error => console.error(error),
 			() => alert("success")
