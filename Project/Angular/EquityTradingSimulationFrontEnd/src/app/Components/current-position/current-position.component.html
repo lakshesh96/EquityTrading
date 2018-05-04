@@ -25,17 +25,17 @@
 				<td>{{cp.StockName}} ({{cp.StockSymbol}})</td>
 				<td>{{cp.CurrentPrice | currency:'INR':'symbol' }}</td>
 				<td>{{cp.AvgBuyingPrice | currency:'INR':'symbol' }}</td>
-				<td>{{cp.AvgQuantity}}</td>
+				<td>{{cp.TotalQuantity}}</td>
 				<td>{{cp.TotalValue | currency:'INR':'symbol' }}</td>
 				<td>
-					<a routerLink="/Trader/Sell"><button type="button" class="btn btn-primary" (click)="Sell(s)">Sell</button></a>
+					<a routerLink="/Trader/Sell"><button type="button" class="btn btn-primary" (click)="Sell(cp)">Sell</button></a>
 					<button class="btn btn-secondary" (click)="cp.ShowDetails = !cp.ShowDetails">Details</button>
 				</td>
 			</tr>
 			<ng-container *ngIf="cp.ShowDetails">
 			<tr *ngFor="let o of cp.CurrentPositionList" style="color: darkgrey">
 				<td></td>
-				<td></td>
+				<td>{{o.Date | date:'mediumDate'}}</td>
 				<td>{{o.Buying_Price | currency:'INR':'symbol' }}</td>
 				<td>{{o.Quantity}}</td>
 				<td>{{o.Total_Value | currency:'INR':'symbol' }}</td>

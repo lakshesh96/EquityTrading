@@ -33,7 +33,7 @@ const AppRoutes:Routes = [
         {path:"CurrentPosition",component:CurrentPositionComponent,canActivate: [AuthGuardService]},
         {path:"PendingOrders",component:PendingOrdersComponent,canActivate: [AuthGuardService]},
         {path:"Search" ,component:SearchComponent,canActivate: [AuthGuardService]},
-        {path:"Sell/:id",component:SellRequestComponent},
+        {path:"Sell",component:SellRequestComponent},
         {path:"",component:CurrentPositionComponent},
         {path:"PendingBlocks",component:BlockExComponent},
         {path:"AddToBlocks",component:BlockCreationComponent},
