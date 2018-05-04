@@ -51,6 +51,8 @@ import { PortfoliomanagerComponent } from './Components/portfoliomanager/portfol
 import { AlertComponent } from './Components/alert/alert.component';
 import { BlockExComponent } from './Components/block-ex/block-ex.component';
 import { PmSelectTraderComponent } from './Components/pm-select-trader/pm-select-trader.component';
+import { HistoryComponent } from './Components/history/history.component';
+import { HistoryService } from './Services/historyService/history.service';
 
 @NgModule({
   declarations: [
@@ -73,7 +75,8 @@ import { PmSelectTraderComponent } from './Components/pm-select-trader/pm-select
     PortfoliomanagerComponent,
     AlertComponent,
     BlockExComponent,
-    PmSelectTraderComponent
+    PmSelectTraderComponent,
+    HistoryComponent
     
   ],
   imports: [
@@ -97,13 +100,14 @@ import { PmSelectTraderComponent } from './Components/pm-select-trader/pm-select
     BlockserviceService,
     CurrentPositionService,
     OrderService,
-	LoginService,
-	AuthGuardService,
-	BuySellService,
-	BuyService,
-  SellService,
-  AdminAuthGuardService,
-  AuthGuardPortfolioService
+    LoginService,
+    AuthGuardService,
+    BuySellService,
+    BuyService,
+    SellService,
+    AdminAuthGuardService,
+    AuthGuardPortfolioService,
+    HistoryService
   ],
   bootstrap: [AppComponent]
 })
