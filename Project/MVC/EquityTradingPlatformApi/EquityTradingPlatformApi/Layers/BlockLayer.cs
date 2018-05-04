@@ -30,13 +30,25 @@ namespace EquityTradingPlatformApi.Layers
                              select n;
                 return CustomBlocks.CreateList(blocks.ToList());
             }
-            var userblocks = from n in db.Blocks
-                             join m in db.Orders on n.Id equals m.BlockId
-                             where n.BlockStatus.ToString() == blockStatus & m.UserId == userId
-                             select n;
-            return CustomBlocks.CreateList(userblocks.ToList());
+            else
+                return null;
         }
-
+        
+        public List<CustomBlockModel> GetBLocksForAddition(int userId,int orderId)
+        {
+            CustomBlockCreation CustomBlocks = new CustomBlockCreation();
+            Order order = db.Orders.Find(orderId);
+            if (order != null)
+            {
+                var userblocks = from n in db.Blocks
+                                 join m in db.Orders on n.Id equals m.BlockId
+                                 where n.BlockStatus == BlockStatus.Pending & m.UserId == userId & n.Side == order.OrderSide & n.Type == order.OrderType & n.StocksId == order.StocksId
+                                 select n;
+                return CustomBlocks.CreateList(userblocks.ToList());
+            }
+            else
+                return null;
+        }
         public Boolean AddNewOrderToBlock(int orderId,int blockId)
         {
             var order = db.Orders.Find(orderId);

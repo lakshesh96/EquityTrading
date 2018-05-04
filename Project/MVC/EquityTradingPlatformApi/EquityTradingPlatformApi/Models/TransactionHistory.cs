@@ -11,7 +11,7 @@ namespace EquityTradingPlatformApi.Models
 
         public int Id { get; set; }
 
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         [Required]
         public int UserId { get; set; }
@@ -28,7 +28,7 @@ namespace EquityTradingPlatformApi.Models
         [Range(0,double.MaxValue)]
         public double SellPrice { get; set; }
 
-        public Stocks stock { get; set; }
+        public virtual Stocks stock { get; set; }
 
         [Required]
         public int StockId { get; set; }

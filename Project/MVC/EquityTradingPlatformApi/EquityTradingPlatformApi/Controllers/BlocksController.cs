@@ -44,11 +44,16 @@ namespace EquityTradingPlatformApi.Controllers
         [Route("api/Trader/Block")]
         public IHttpActionResult GetTraderPendingBlocks(int userId, string blockStatus)
         {
-            
             List<CustomBlockModel> blockList = blockLayer.GetBlocksWithStatus(userId, blockStatus);
             return Ok(blockList);
         }
 
+        [Route("api/Trader/ExistingBlock")]
+        public IHttpActionResult GetTraderPendingBlocksForAdd(int userId, int orderId)
+        {
+            List<CustomBlockModel> blockList = blockLayer.GetBLocksForAddition(userId,orderId);
+            return Ok(blockList);
+        }
 
         [Route("api/Trader/AddToBlock")]
         public IHttpActionResult AddtoBlocks(int orderId, int blockId)

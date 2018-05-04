@@ -21,11 +21,11 @@
 	<tbody>     
 		<ng-template ngFor let-cp [ngForOf]="historyList">
 			<tr class="">
-				<td>{{cp.StockName}} ({{cp.StockSymbol}})</td>
+				<td>{{cp.stock.Name}} ({{cp.stock.Symbol}})</td>
 				<td>{{cp.BuyPrice | currency:'INR':'symbol' }}</td>
-				<td>{{cp.SellPricePrice | currency:'INR':'symbol' }}</td>
+				<td>{{cp.SellPrice | currency:'INR':'symbol' }}</td>
 				<td>{{cp.Quantity}}</td>
-				<td>{{cp.TotalValue | currency:'INR':'symbol' }}</td>
+				<td>{{cp.Quantity*(cp.BuyPrice-cp.SellPrice) | currency:'INR':'symbol' }}</td>
 			</tr>
 		</ng-template>
 	</tbody>

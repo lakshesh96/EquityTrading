@@ -3,6 +3,7 @@ import {BlockserviceService} from "../../Services/blockservice/blockservice.serv
 import { OrderService } from '../../Services/Order/order.service';
 import { ListService } from '../../Services/list-service/list.service';
 import { StocksService } from '../../Services/StocksList/stocks.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-block-creation',
@@ -12,25 +13,30 @@ import { StocksService } from '../../Services/StocksList/stocks.service';
 export class BlockCreationComponent implements OnInit {
   pendingBlocks=[];
   OrderId:number;
-  constructor(public blockService:BlockserviceService) {
-    this.getPendingBlocks();
+  constructor(private blockService:BlockserviceService,private router:Router) {
+    
    }
 
   ngOnInit() {
+    this.OrderId= sessionStorage["OrderId"];
+    if(this.OrderId == null)
+      alert("Order not selected please try again");
+    else
+      this.getPendingBlocks();
   }
  AddtoBlock(BlockId)
   {
-    this.OrderId= sessionStorage["OrderId"]
+    
     if(this.OrderId == null)
-      alert("Order not selected please try again")
+      alert("Order not selected please try again");
     else
     {
       this.blockService.AddToBlock(this.OrderId,BlockId);
-      this.getPendingBlocks();
+      this.router.navigateByUrl("/Trader");
     }
   }
   getPendingBlocks(){
-    this.blockService.get_pendingblock().subscribe(
+    this.blockService.get_pendingblock(this.OrderId).subscribe(
       response => this.pendingBlocks= response,
       error => console.error(error),
       () => console.log(this.pendingBlocks)

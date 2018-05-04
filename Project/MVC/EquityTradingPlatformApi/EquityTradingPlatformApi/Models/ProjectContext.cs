@@ -10,7 +10,7 @@ namespace EquityTradingPlatformApi.Models
     {
         public ProjectContext():base("Equity_Trade_Azure")
         {
-            this.Configuration.LazyLoadingEnabled = false;
+           // this.Configuration.LazyLoadingEnabled = false;
         }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Block> Blocks { get; set; }

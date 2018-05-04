@@ -15,6 +15,7 @@ export class BlockserviceService {
   private ex_url:string="http://localhost:52705/api/Trader/ExecuteBlock?blockId="*/
 
   private url:string = "api/Trader/Block?userId=";
+  private addOrderUrl:string = "api/Trader/ExistingBlock?userId=";
   private cr_url:string = "api/Trader/NewBlock?orderId=";
   private ex_url:string = "api/Trader/ExecuteBlock?blockId=";
   private AddToExisting_url:string="api/Trader/AddToBlock?orderId=";
@@ -31,8 +32,8 @@ export class BlockserviceService {
 
 
 
-  get_pendingblock(){
-    return this.gs.GetMethod(this.url+this.id+"&blockStatus=Pending");
+  get_pendingblock(orderId){
+    return this.gs.GetMethod(this.addOrderUrl+this.id+"&orderId="+orderId);
     
     /*this.gs.GetMethod(this.url+this.id+"&blockStatus=Partial").subscribe(
       response => this.partialblock = response,
