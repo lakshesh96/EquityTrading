@@ -22,6 +22,7 @@ import {AdminAuthGuardService} from '../Services/Admin-Auth-Guard/admin-auth-gua
 import {AuthGuardPortfolioService} from '../Services/Auth-Guard-PM/auth-guard-portfolio.service';
 import { AddstocksComponent } from '../Components/addstocks/addstocks.component';
 import { BlockExComponent } from '../Components/block-ex/block-ex.component';
+import { HistoryComponent } from '../Components/history/history.component';
 
 const AppRoutes:Routes = [
 	{path:"Register",component:RegisterComponent},
@@ -33,11 +34,12 @@ const AppRoutes:Routes = [
         {path:"CurrentPosition",component:CurrentPositionComponent,canActivate: [AuthGuardService]},
         {path:"PendingOrders",component:PendingOrdersComponent,canActivate: [AuthGuardService]},
         {path:"Search" ,component:SearchComponent,canActivate: [AuthGuardService]},
-        {path:"Sell/:id",component:SellRequestComponent},
-        {path:"",component:CurrentPositionComponent},
-        {path:"PendingBlocks",component:BlockExComponent},
-        {path:"AddToBlocks",component:BlockCreationComponent},
-        {path:"**",component:LoginComponent},
+        {path:"Sell/:id",component:SellRequestComponent,canActivate: [AuthGuardService]},
+        {path:"",component:CurrentPositionComponent,canActivate: [AuthGuardService]},
+        {path:"PendingBlocks",component:BlockExComponent,canActivate: [AuthGuardService]},
+        {path:"AddToBlocks",component:BlockCreationComponent,canActivate: [AuthGuardService]},
+        {path:"History",component:HistoryComponent,canActivate: [AuthGuardService]},
+        {path:"**",component:LoginComponent,canActivate: [AuthGuardService]},
         ]
      },
      { path:"Portfoliomanager", component:PortfoliomanagerComponent,
