@@ -21,16 +21,38 @@ export class CurrentPositionService {
 	}
 
 	performViewFormatting(list: CurrentPosition[]) {
+		console.log("Formatting: ", list);
 		let formattedList: CurrentPositionModelView[] = [];
 		
 		formattedList.push(new CurrentPositionModelView(list[0]));
 
+		// for (var i = 1; i < list.length; i++) {
+		// 	formattedList.forEach(element => {
+		// 		console.log("i:", i, "outside");
+		// 		if (!element.AddCurrentPosition(list[i])) {
+		// 			console.log("i:", i, "created new entry");
+		// 			formattedList.push(new CurrentPositionModelView(list[i]));
+		// 		} else {
+		// 			console.log("Added index:", i);
+		// 			break;
+		// 		}
+		// 	});
+		// 	console.log("outside list"); 
+		// }
+
+
 		for (var i = 1; i < list.length; i++) {
-			formattedList.forEach(element => {
-				if (!element.AddCurrentPosition(list[i])) {
+			for (var j = 0; j < formattedList.length; j++) {
+				console.log("i:", i, "outside");
+				if (!formattedList[j].AddCurrentPosition(list[i])) {
+					console.log("i:", i, "created new entry");
 					formattedList.push(new CurrentPositionModelView(list[i]));
+				} else {
+					console.log("Added index:", i);
+					break;
 				}
-			});
+			}
+			console.log("outside list"); 
 		}
 		return formattedList;
 	}
