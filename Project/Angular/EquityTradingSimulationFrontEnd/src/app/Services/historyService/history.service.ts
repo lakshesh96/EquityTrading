@@ -11,6 +11,7 @@ export class HistoryService {
 
   getHistory(userId)
   {
+    console.log("At history serrvice",userId);
     return this.globalService.GetWithId(this.url,userId);
   }
 

@@ -18,10 +18,10 @@ namespace EquityTradingPlatformApi.Controllers
 
         // GET: api/TransactionHistories
         [Route("api/TransactionHistory/{userId}")]
-        public IQueryable<TransactionHistory> GetTransactionHistory(int userId)
+        public List<TransactionHistory> GetTransactionHistory(int userId)
         {
             var histories = from n in db.TransactionHistory where n.UserId == userId select n;
-            return histories;
+            return histories.ToList();
         }
         
         protected override void Dispose(bool disposing)
