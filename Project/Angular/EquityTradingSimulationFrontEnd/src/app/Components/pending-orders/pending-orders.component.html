@@ -42,7 +42,7 @@
                 side.value=l.OrderSide;type.value=l.OrderType;quantity.value=l.Quantity;limit.value=l.LimitPrice;stop.value=l.StopPrice;date.value=l.DateAdded;
                 status.value=l.OrderStatus; ToggleTextboxes(type.value); divhide=false;"/></td>
                 <div [hidden]="usertype">
-                  <td><a [routerLink]="['/Trader/PendingBlocks']" >  <button type="button" class="btn btn-outline-primary" style="margin-top: 2px" (click)="blocknew(l.Id);pending=false">Add to New</button></a></td> 
+                  <td><a >  <button type="button" class="btn btn-outline-primary" style="margin-top: 2px" (click)="blocknew(l.Id);pending=false">Add to New</button></a></td> 
                   <td><a [routerLink]="['/Trader/AddToBlocks']" >  <button type="button" class="btn btn-outline-primary" style="margin-top: 2px" (click)="blockexisting(l.Id);partial=false">Add to Existing</button></a> </td>
                 </div>
           </tr>

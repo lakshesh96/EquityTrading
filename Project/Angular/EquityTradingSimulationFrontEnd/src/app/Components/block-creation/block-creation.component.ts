@@ -39,7 +39,14 @@ export class BlockCreationComponent implements OnInit {
     this.blockService.get_pendingblock(this.OrderId).subscribe(
       response => this.pendingBlocks= response,
       error => console.error(error),
-      () => console.log(this.pendingBlocks)
+      () => {
+        console.log(this.pendingBlocks);
+        if(this.pendingBlocks.length==0)
+          {
+            alert("No Matching Block Found. Please create a new block");
+            this.router.navigateByUrl("/Trader/PendingOrders");
+          }
+    }
     );
   }
  

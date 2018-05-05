@@ -3,6 +3,7 @@ import {PendingStocks} from '../../Models/pending-stocks';
 import {PendingListService} from '../../Services/Pending/pending-list.service';
 import { BlockserviceService } from '../../Services/blockservice/blockservice.service';
 import { GlobalService } from '../../Services/global.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -23,8 +24,7 @@ export class PendingOrdersComponent implements OnInit
   a:string="Market";
   usertype:boolean=true;
   stockname:string;
-  constructor(private PS:PendingListService,
-    private bs:BlockserviceService,private gs:GlobalService) {
+  constructor(private PS:PendingListService,private bs:BlockserviceService,private gs:GlobalService,private router:Router) {
     this.getOrders();
     this.pending=true;
     this.partial=true;
@@ -56,7 +56,10 @@ export class PendingOrdersComponent implements OnInit
     this.bs.createnewblock(orderid).subscribe(
       response => response = response,
       error => console.error(error),
-      () => console.log(console.log(response+ " Hello"))
+      () => {
+        console.log(console.log(response+ " Hello"));
+        this.router.navigateByUrl("/Trader/PendingBlocks");
+    }
     );;
   }
   blockexisting(orderid)
