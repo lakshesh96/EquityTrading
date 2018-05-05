@@ -108,7 +108,17 @@ namespace EquityTradingPlatformApi.Controllers
 
             order.DateAdded = System.DateTime.Now;
             order.OrderStatus = OrderStatus.Pending;
-
+            if(order.OrderSide == Side.Sell)
+            {
+                var currentPositionsQuantity = (from n in db.CurrentPositions
+                                                join m in db.Orders
+                                                on n.OrderId equals m.Id
+                                                where m.StocksId == order.StocksId && m.UserId == order.UserId
+                                                select n.VolumeExecuted).Sum();
+                var usedQuantity = (from n in db.Orders where n.UserId == order.UserId && n.OrderSide == Side.Sell select n.Quantity).Sum();
+                if (!(order.Quantity <= (currentPositionsQuantity - usedQuantity)))
+                    return Ok("Could Not Add to Sell due to Insufficient Volumes");
+            }
             db.Orders.Add(order);
             try
             {

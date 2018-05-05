@@ -42,7 +42,7 @@ namespace EquityTradingPlatformApi.Layers
             {
                 var userblocks = from n in db.Blocks
                                  join m in db.Orders on n.Id equals m.BlockId
-                                 where n.BlockStatus == BlockStatus.Pending & m.UserId == userId & n.Side == order.OrderSide & n.Type == order.OrderType & n.StocksId == order.StocksId
+                                 where( n.BlockStatus == BlockStatus.Pending && m.UserId == userId && n.Side == order.OrderSide && n.Type == order.OrderType && n.StocksId == order.StocksId)
                                  select n;
                 return CustomBlocks.CreateList(userblocks.ToList());
             }
@@ -78,7 +78,8 @@ namespace EquityTradingPlatformApi.Layers
                 BlockStatus = BlockStatus.Pending,
                 Side = order.OrderSide,
                 UserId = order.UserId,
-                StocksId = order.StocksId
+                StocksId = order.StocksId,
+                Type = order.OrderType
             };
             try
             {
